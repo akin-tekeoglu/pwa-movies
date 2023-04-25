@@ -1,18 +1,28 @@
 /** @type {import('next').NextConfig} */
-const withPWA = require('next-pwa')({
-  dest: 'public'
-})
+const runtimeCaching = require("next-pwa/cache");
+const withPWA = require("next-pwa")({
+  dest: "public",
+  skipWaiting: true,
+  runtimeCaching: [
+    ...runtimeCaching,
+    {
+      urlPattern: /https:\/\/api.themoviedb.org\/.*/,
+      handler: "NetworkFirst",
+    },
+  ],
+  buildExcludes: [/middleware-manifest.json$/],
+});
 
 const nextConfig = withPWA({
   reactStrictMode: true,
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'image.tmdb.org'
+        protocol: "https",
+        hostname: "image.tmdb.org",
       },
     ],
   },
-})
+});
 
-module.exports = nextConfig
+module.exports = nextConfig;
