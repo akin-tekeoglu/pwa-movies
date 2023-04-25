@@ -3,5 +3,5 @@
 
 ## About
 
-A movie application where you can browse the upcoming movies and watch trailers
+A movie application where you can browse the upcoming movies and watch trailers. Movies are provided from [themoviedb.org](https://www.themoviedb.org/)
 
