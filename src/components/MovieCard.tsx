@@ -1,8 +1,9 @@
-import { useVideos } from "@/utils/httpClient";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import YouTube from "react-youtube";
+import { useState } from "react";
 import MovieVideoPlayer from "./MovieVideoPlayer";
+import Popup from "reactjs-popup";
+import 'reactjs-popup/dist/index.css';
+
 
 type MovieCardProps = {
   id: number;
@@ -25,16 +26,18 @@ export default function MovieCard({
       <Image
         src={image.toString()}
         alt={title}
-        className="aspect-auto flex-none"
+        className="aspect-auto flex-auto md:flex-none"
         width={300}
         height={400}
       />
       <div className="flex-auto space-y-3">
         <div className="flex justify-between">
-          <h2 className="text-xl font-semibold">{title}</h2>
-          <h3 className="text-lg font-semibold">{rating}/10</h3>
+          <h2 className="text-base md:text-xl font-semibold">{title}</h2>
+          <h3 className="text-sm md:text-lg font-semibold">{rating}/10</h3>
         </div>
-        <p className="text-lg font-medium">{overview}</p>
+        <p className="text-xs font-medium md:text-lg max-h-50 overflow-ellipsis overflow-hidden">
+          {overview}
+        </p>
         {!showTrailer && (
           <button
             onClick={(e) => setShowTrailer(true)}
@@ -44,8 +47,17 @@ export default function MovieCard({
             Play trailer
           </button>
         )}
-        {showTrailer && <MovieVideoPlayer id={id} />}
+        {showTrailer && !isMobile() && <MovieVideoPlayer id={id} />}
+        {showTrailer && isMobile() && (
+          <Popup open={true} closeOnDocumentClick onClose={()=>setShowTrailer(false)} contentStyle={{width:"fit-content"}}>
+              <MovieVideoPlayer id={id} width={window.innerWidth} />
+          </Popup>
+        )}
       </div>
     </div>
   );
+}
+
+function isMobile() {
+  return window.innerWidth <= 768;
 }

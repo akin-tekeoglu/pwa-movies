@@ -11,6 +11,7 @@ const withPWA = require("next-pwa")({
     },
   ],
   buildExcludes: [/middleware-manifest.json$/],
+  disable:process.env.NODE_ENV!=='production'
 });
 
 const nextConfig = withPWA({
